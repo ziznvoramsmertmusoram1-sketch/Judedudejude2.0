@@ -17,8 +17,8 @@ from google import genai
 # ==========================================================================
 # CONFIGURATION
 # ==========================================================================
-BOT_TOKEN = os.getenv("BOT_TOKEN", "ТВОЙ_TELEGRAM_BOT_TOKEN")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "ТВОЙ_GEMINI_API_KEY")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "8645952849:AAGxvNpsrX-a2Nf5OKyB-fGDdtqK05OHSxE")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AQ.Ab8RN6ItD3Gg80CPOSTmqXpW-Ff2ywLkhAHJfb2jjD0SJyHAmg")
 MINI_APP_URL = os.getenv("MINI_APP_URL", "https://your-vercel-or-ngrok-url.com")
 
 # Initialize Gemini Client
