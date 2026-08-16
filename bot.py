@@ -19,7 +19,7 @@ from google import genai
 # ==========================================================================
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8645952849:AAGxvNpsrX-a2Nf5OKyB-fGDdtqK05OHSxE")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AQ.Ab8RN6ItD3Gg80CPOSTmqXpW-Ff2ywLkhAHJfb2jjD0SJyHAmg")
-MINI_APP_URL = os.getenv("MINI_APP_URL", "https://your-vercel-or-ngrok-url.com")
+MINI_APP_URL = os.getenv("MINI_APP_URL", "https://ziznvoramsmertmusoram1-sketch.github.io/Judedudejude2.0/")
 
 # Initialize Gemini Client
 ai_client = genai.Client(api_key=GEMINI_API_KEY)
