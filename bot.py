@@ -76,11 +76,9 @@ class ChatRequest(BaseModel):
     message: str
     system_prompt: str = "Ты — умный ИИ-помощник."
 
-@app.get("/", response_class=HTMLResponse)
-async def serve_index():
-    """Раздаёт главное веб-приложение"""
-    with open("index.html", "r", encoding="utf-8") as f:
-        return f.read()
+# Раздаёт index.html, style.css и app.js прямо из корня
+app.mount("/", StaticFiles(directory=".", html=True), name="static")
+
 
 @app.post("/api/chat")
 async def chat_endpoint(req: ChatRequest):
