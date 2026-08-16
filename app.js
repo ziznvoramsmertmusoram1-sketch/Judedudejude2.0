@@ -87,8 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
         sendBtn.disabled = true;
 
         // Add Placeholder Assistant Loading Message
-        const loadingId = appendLoadingMessage();
-        scrollToBottom();
+        const response = await fetch('https://ziznvoramsmertmusoram1-sketch.github.io/Judedudejude2.0/', {
+
+
 
         try {
             // Call Python Backend API
