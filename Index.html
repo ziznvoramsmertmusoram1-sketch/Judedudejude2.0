@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI Assistant Mini App</title>
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Overlay for mobile sidebar -->
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+        <!-- Sidebar / Lateral Menu -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <button id="new-chat-btn" class="btn-new-chat">
+                    <i data-lucide="plus"></i>
+                    <span>Новый чат</span>
+                </button>
+                <button id="close-sidebar-btn" class="icon-btn mobile-only">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <div class="sidebar-section-title">История диалогов</div>
+            <div id="chat-history-list" class="chat-history-list">
+                <!-- History items populated dynamically -->
+                <div class="history-item active">
+                    <i data-lucide="message-square"></i>
+                    <span class="history-title">Новый диалог</span>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button id="open-settings-btn" class="sidebar-footer-btn">
+                    <i data-lucide="settings"></i>
+                    <span>Настройки</span>
+                </button>
+                <div class="user-profile-badge">
+                    <div id="user-avatar" class="avatar-placeholder">U</div>
+                    <div class="user-info">
+                        <span id="user-name" class="user-name">Пользователь</span>
+                        <span class="user-status">Telegram Sync</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Navbar -->
+            <header class="top-navbar">
+                <div class="navbar-left">
+                    <button id="toggle-sidebar-btn" class="icon-btn">
+                        <i data-lucide="panel-left"></i>
+                    </button>
+                    <!-- LOGO PLACEHOLDER: Ты сможешь вставить сюда свой <img> с логотипом от ChatGPT -->
+                    <div class="brand-logo-container">
+                        <div id="brand-logo" class="brand-logo">
+                            <!-- Заглушка логотипа с градиентом и иконкой искры Gemini/ChatGPT -->
+                            <i data-lucide="sparkles" class="logo-icon"></i>
+                        </div>
+                        <div class="brand-info">
+                            <span class="brand-title">CRAX AI</span>
+                            <span class="model-badge">Gemini 2.5 Flash</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="navbar-right">
+                    <button id="clear-chat-btn" class="icon-btn" title="Очистить чат">
+                        <i data-lucide="trash-2"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Chat Area -->
+            <div id="chat-container" class="chat-container">
+                <!-- Welcome Banner (Shows when chat is empty) -->
+                <div id="welcome-view" class="welcome-view">
+                    <div class="welcome-hero">
+                        <div class="hero-logo-box">
+                            <i data-lucide="bot" class="hero-icon"></i>
+                        </div>
+                        <h1 class="welcome-title">Привет, <span id="welcome-user-name">Друг</span>!</h1>
+                        <p class="welcome-subtitle">Чем я могу помочь тебе сегодня?</p>
+                    </div>
+
+                    <!-- Suggestion Cards Grid -->
+                    <div class="suggestions-grid">
+                        <div class="suggestion-card" data-prompt="Напиши быстрый скрипт на Python для Telegram бота">
+                            <div class="card-icon"><i data-lucide="code-2"></i></div>
+                            <div class="card-text">
+                                <strong>Код на Python</strong>
+                                <span>Скрипт для Telegram бота</span>
+                            </div>
+                        </div>
+                        <div class="suggestion-card" data-prompt="Придумай классную идею для веб-приложения на HTML и JS">
+                            <div class="card-icon"><i data-lucide="lightbulb"></i></div>
+                            <div class="card-text">
+                                <strong>Идеи проектов</strong>
+                                <span>Для веб-сервиса или игры</span>
+                            </div>
+                        </div>
+                        <div class="suggestion-card" data-prompt="Объясни простыми словами, как работают нейросети ИИ">
+                            <div class="card-icon"><i data-lucide="cpu"></i></div>
+                            <div class="card-text">
+                                <strong>Как работает ИИ</strong>
+                                <span>Простыми словами</span>
+                            </div>
+                        </div>
+                        <div class="suggestion-card" data-prompt="Составь список лучших треков в жанре Phonk и Wave">
+                            <div class="card-icon"><i data-lucide="music"></i></div>
+                            <div class="card-text">
+                                <strong>Музыкальный сет</strong>
+                                <span>Треки Phonk и Wave</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Messages Stream -->
+                <div id="messages-list" class="messages-list"></div>
+            </div>
+
+            <!-- Bottom Input Bar Area -->
+            <footer class="input-section">
+                <div class="input-box-wrapper">
+                    <textarea 
+                        id="user-input" 
+                        class="chat-input" 
+                        placeholder="Спроси о чём угодно..." 
+                        rows="1"
+                    ></textarea>
+                    
+                    <div class="input-actions">
+                        <div class="action-left">
+                            <button class="input-action-btn" id="attach-btn" title="Прикрепить файл">
+                                <i data-lucide="paperclip"></i>
+                            </button>
+                        </div>
+                        <div class="action-right">
+                            <button class="send-btn" id="send-btn" disabled>
+                                <i data-lucide="arrow-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="disclaimer-text">
+                    CRAX AI может допускать ошибки. Проверяйте важную информацию.
+                </div>
+            </footer>
+        </main>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal-backdrop">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Настройки ассистента</h3>
+                    <button id="close-settings-btn" class="icon-btn"><i data-lucide="x"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="setting-group">
+                        <label for="system-prompt-input">Системная инструкция (System Prompt):</label>
+                        <textarea id="system-prompt-input" class="modal-textarea" rows="3" placeholder="Ты — умный и дружелюбный ИИ-помощник..."></textarea>
+                    </div>
+                    <div class="setting-group">
+                        <label>Тема оформления:</label>
+                        <div class="theme-selector">
+                            <button class="theme-btn active" data-theme="dark">Тёмная Gemini</button>
+                            <button class="theme-btn" data-theme="telegram">Telegram Sync</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="save-settings-btn" class="btn-primary">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
